@@ -1,6 +1,18 @@
 <?php
 	session_start();
 	include("./settings/connect_datebase.php");
+	include("ajax/auth.php");
+
+	$isAuth = false;
+	$userId = null;
+
+	if(isset($_COOKIE['token'])) {
+	    $data = verifyJWT($_COOKIE['token']);
+	    if($data) {
+	        $isAuth = true;
+	        $userId = $data['userId'];
+	    }
+	}
 ?>
 <!DOCTYPE HTML>
 <html>
@@ -54,7 +66,7 @@
 											echo '</div>';
 
 											
-											if (isset($_SESSION['user'])) {
+											if ($isAuth) {
 												echo 
 													'<div class="messages" id="'.$read_news["id"].'">
 														<input type="text">
